@@ -144,6 +144,12 @@ The workspace sidecar container includes Composer, Node.js, NPM, and other tools
 docker compose -f compose.dev.yaml exec workspace bash
 ```
 
+### Generate App Encryption key:
+```bash
+docker compose -f compose.dev.yaml exec workspace php artisan key:generate
+docker compose -f compose.dev.yaml exec workspace php artisan config:cache
+```
+
 ### Run Artisan Commands:
 
 ```bash
@@ -247,3 +253,74 @@ git commit -m "Description of changes"
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
+
+
+## MYEDIT fix + debug
+
+1. **Encryption Key:**
+    - run artisan generate encryption key to generate and autoinsert key into .env, 
+    - clear config
+
+### Generate App Encryption key:
+```bash
+docker compose -f compose.dev.yaml exec workspace php artisan key:generate
+docker compose -f compose.dev.yaml exec workspace php artisan config:cache
+``` 
+2. **Health check:**
+    - [http://localhost](http://localhost)
+    - [http://localhost/health](http://localhost/health)
+    - [http://localhost/info](http://localhost/info)
+
+3. **REDIS Server:**
+    - REDIS uses pecl installed phpredis extension, else need to 'composer install predis/predis' or 'composer require predis/predis'
+    - 'php -i' to check for REDIS extension installed and enabled
+    - run to display composer installed 'composer show -i'
+    - conncection refused error due to service hostname resolution
+    - check logs
+    - change config, database config or .env config so redis-host uses service name redis == hostname, will not connect to 127.0.0.1
+      - REDIS_HOST=redis
+      - php artisan config:clear
+    - docker resolves service names as hostname in the docker network even if not in hosts file
+    - service-names == hostnames == web, postgrep, redis, php-fpm etc, 
+    - 5 ways to resolve hostname to ip address in linux
+      - ping www.yahoo.com
+      - getent ahosts www.yahoo.com
+      - host www.yahoo.com
+      - dig www.yahoo.com
+      - resolveip www.yahoo.com
+      - nslookup www.yahoo.com
+      - curl www.yahoo.com
+    - rebuild containers after changing redis-host=redis
+    - open redis terminal, tail server == /data bash# redis-cli monitor
+```bash
+redis-cli monitor
+``` 
+
+4. **Postgres sql:**
+ - psql terminal
+  ```bash
+	psql --help
+  ```
+ - list databases
+  ```bash
+	psql -U laravel -l
+	psql -U USERNAME -l
+  ```
+ - connect to database
+  ```bash
+	psql -U laravel -d app
+	psql -U laravel -d DATABASE_NAME
+  ```
+ - list tables, roles, help, quit, query
+ ```bash
+  psql --help
+  psql -U laravel -l
+  psql -U USERNAME -l
+  psql -U laravel -d app
+  psql -U laravel -d DATABASE_NAME
+  app=#  \dt
+  app=#  \dg
+  app=#  \?
+  app=#  \q
+  app=# select * from users;
+```
