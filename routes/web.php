@@ -129,7 +129,7 @@ Route::get('/health', function () {
         }
     } catch (\Exception $e) {
         $status['redis'] = 'Exception';
-        var_dump($e->getMessage());
+        var_export($e->getMessage());
     }
 
     // Check Storage Access

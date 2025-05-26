@@ -121,6 +121,18 @@ composer install
 npm install
 npm run dev
 ```
+  *Encryption Key:*
+
+  - generate encryption key
+
+```bash
+docker compose -f compose.dev.yaml exec workspace php artisan key:generate
+```
+  - clear config
+  
+```bash
+docker compose -f compose.dev.yaml exec workspace php artisan config:cache
+```
 
 4. Run Migrations:
 
