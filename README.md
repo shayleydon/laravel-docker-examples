@@ -131,6 +131,12 @@ docker compose -f compose.dev.yaml exec workspace php artisan key:generate
   - clear config
   
 ```bash
+docker compose -f compose.dev.yaml exec workspace php artisan config:clear
+```
+
+  - cache config
+  
+```bash
 docker compose -f compose.dev.yaml exec workspace php artisan config:cache
 ```
 
