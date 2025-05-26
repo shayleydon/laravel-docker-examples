@@ -165,6 +165,7 @@ docker compose -f compose.dev.yaml exec workspace bash
 ### Generate App Encryption key:
 ```bash
 docker compose -f compose.dev.yaml exec workspace php artisan key:generate
+docker compose -f compose.dev.yaml exec workspace php artisan config:clear
 docker compose -f compose.dev.yaml exec workspace php artisan config:cache
 ```
 
@@ -282,6 +283,7 @@ This project is licensed under the MIT License. See the LICENSE file for more de
 ### Generate App Encryption key:
 ```bash
 docker compose -f compose.dev.yaml exec workspace php artisan key:generate
+docker compose -f compose.dev.yaml exec workspace php artisan config:clear
 docker compose -f compose.dev.yaml exec workspace php artisan config:cache
 ``` 
 2. **Health check:**
